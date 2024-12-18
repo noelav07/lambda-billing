@@ -4,13 +4,13 @@ from datetime import datetime, timedelta
 
 # Function to get the USD to INR exchange rate dynamically
 def get_exchange_rate():
-    url = "https://v6.exchangerate-api.com/v6/54c6243ebcfc045f40ea797b/latest/USD"  # Replace YOUR_API_KEY with your actual API key
+    url = ""  # Replace YOUR_API_KEY with your actual API key
     response = requests.get(url)
     data = response.json()
     if response.status_code == 200 and data.get("conversion_rates"):
         return data["conversion_rates"]["INR"]
     else:
-        print("Error fetching exchange rate.")
+        print("⚠️ Error fetching exchange rate.")
         return 82.5  # Default fallback rate
 
 # Initialize the Cost Explorer client
@@ -61,24 +61,24 @@ for result in response['ResultsByTime']:
 total_cost_last_30_days = sum(services_cost.values())
 
 # Print the header with emojis
-print(":bar_chart: AWS COST DETAILS REPORT -", today)
-print(f":clock3: TODAY'S SPENDING DETAILS\n{today}")
+print("📊 AWS COST DETAILS REPORT -", today)
+print(f"⏰ TODAY'S SPENDING DETAILS\n{today}")
 
 # Print today's spending
 if total_cost_today == 0.00:
     print("No costs incurred today")
 else:
-    print(f"Today's Total: ${total_cost_today:.2f} (₹{total_cost_today * exchange_rate:.2f})")
+    print(f"Today's Total: 💵 ${total_cost_today:.2f} (₹{total_cost_today * exchange_rate:.2f})")
 
 # Print the 30-day cost breakdown with emojis
-print(f":date: 30-DAY COST BREAKDOWN\n{start_date} - {today}")
+print(f"📅 30-DAY COST BREAKDOWN\n{start_date} - {today}")
 for service, cost in services_cost.items():
     service_cost_inr = cost * exchange_rate  # Dynamic conversion
-    print(f"📌 {service} - ${cost:.2f} (₹{service_cost_inr:.2f})")
+    print(f"📌 {service} - 💵 ${cost:.2f} (₹{service_cost_inr:.2f})")
 
 # Print the monthly total and summary with emojis
-print(f"\n💰 Monthly Total: ${total_cost_last_30_days:.2f} (₹{total_cost_last_30_days * exchange_rate:.2f})")
-print(f"\n:drawing_pin: SUMMARY")
-print(f"📅 Today's Spending - ${total_cost_today:.2f} (₹{total_cost_today * exchange_rate:.2f})")
-print(f"📊 Last 30 Days Total - ${total_cost_last_30_days:.2f} (₹{total_cost_last_30_days * exchange_rate:.2f})")
-print(f"📉 Daily Average Cost - ${total_cost_last_30_days / 30:.2f} (₹{(total_cost_last_30_days / 30) * exchange_rate:.2f})")
+print(f"\n💰 Monthly Total: 💵 ${total_cost_last_30_days:.2f} (₹{total_cost_last_30_days * exchange_rate:.2f})")
+print(f"\n📋 SUMMARY")
+print(f"📅 Today's Spending - 💵 ${total_cost_today:.2f} (₹{total_cost_today * exchange_rate:.2f})")
+print(f"📊 Last 30 Days Total - 💵 ${total_cost_last_30_days:.2f} (₹{total_cost_last_30_days * exchange_rate:.2f})")
+# print(f"📉 Daily Average Cost - 💵 ${total_cost_last_30_days / 30:.2f} (₹{(total_cost_last_30_days / 30) * exchange_rate:.2f})")
