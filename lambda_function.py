@@ -2,10 +2,10 @@ import boto3
 import requests
 import os
 from datetime import datetime, timedelta
-
+import slack
 # Function to get the USD to INR exchange rate dynamically
 def get_exchange_rate():
-    url = ""  # Replace with your API key
+    url = "https://v6.exchangerate-api.com/v6/54c6243ebcfc045f40ea797b/latest/USD"  # Replace with your API key
     response = requests.get(url)
     data = response.json()
     if response.status_code == 200 and data.get("conversion_rates"):
