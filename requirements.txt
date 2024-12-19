@@ -1,0 +1,6 @@
+slack-bolt 
+boto3
+requests 
+python-dotenv
+botocore
+slackclient
