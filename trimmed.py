@@ -84,7 +84,7 @@ def get_aws_costs():
         # Format the header with larger text
         day_name = end_date.strftime('%A')
         # message = f"📊 *BILL REPORT - {day_name} {end_date.strftime('%B %d, %Y')}*\n\n"
-        message = f"📊 *BILL REPORT*\n\n"
+        message = f"📊 *{end_date.strftime('%B')}* Month Bill Cycle\n\n"
 
         # # Today's costs section
         # today_total = 0
@@ -114,8 +114,8 @@ def get_aws_costs():
         # message += f"\n*Today's Total:* 💵${today_total:,.2f} (₹{today_total_inr:,.2f})\n\n"
         
         # Monthly costs section
-        message += "*📅 30-DAYS COST BREAKDOWN*\n"
-        message += f"_{start_date.strftime('%B %d')} - {end_date.strftime('%B %d, %Y')}_\n\n"
+        # message += "*📅 30-DAYS COST BREAKDOWN*\n"
+        # message += f"_{start_date.strftime('%B %d')} - {end_date.strftime('%B %d, %Y')}_\n\n"
         
         monthly_total = 0
         monthly_services = []
@@ -131,7 +131,7 @@ def get_aws_costs():
         # Sort and display monthly services
         if monthly_services:
             monthly_services.sort(key=lambda x: x[1], reverse=True)
-            message += "*📅 Monthly Service Breakdown*\n"
+            message += "*📅 Services utilised*\n"
             for service, cost in monthly_services:
                 inr_cost = cost * usd_to_inr
                 logger.debug(f"Monthly cost for {service}: USD {cost:.2f}, INR {inr_cost:.2f}")
@@ -141,7 +141,7 @@ def get_aws_costs():
         
         monthly_total_inr = monthly_total * usd_to_inr
         logger.info(f"Monthly total cost: USD {monthly_total:.2f}, INR {monthly_total_inr:.2f}")
-        message += f"\n*Monthly Total:* 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n\n"
+        message += f"\n*Cycle Total:* 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n\n"
         
         # Summary section
         message += "*📌 SUMMARY*\n\n"
@@ -150,7 +150,7 @@ def get_aws_costs():
         logger.info(f"Daily average cost: USD {daily_average:.2f}, INR {daily_average_inr:.2f}")
         
         # message += f"▹ *Today's bill* - 💵${today_total:,.2f} (₹{today_total_inr:,.2f})\n"
-        message += f"▹ *Last 30 Days Total* - 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n"
+        message += f"▹ *Cost incurred till last bill cycle* - 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n"
         # message += f"• *Daily Average Cost* - 💵${daily_average:,.2f} (₹{daily_average_inr:,.2f})"
         
         return message
@@ -161,6 +161,7 @@ def get_aws_costs():
     except Exception as e:
         logger.error(f"Unexpected error in get_aws_costs: {str(e)}", exc_info=True)
         return f"❌ *An unexpected error occurred:* {str(e)}"
+
 
 @app.event("app_mention")
 def handle_mention(event, say):
