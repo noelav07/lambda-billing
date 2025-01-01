@@ -1,13 +1,13 @@
-import json  # Import the json module
-import logging
-import boto3
-from botocore.exceptions import ClientError
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 from dotenv import load_dotenv
 import os
+import boto3
+from botocore.exceptions import ClientError
 import requests
 from datetime import datetime, timedelta
+import json
+import logging
 
 # Configure logging
 logger = logging.getLogger()
@@ -83,9 +83,40 @@ def get_aws_costs():
         
         # Format the header with larger text
         day_name = end_date.strftime('%A')
+        # message = f"📊 *BILL REPORT - {day_name} {end_date.strftime('%B %d, %Y')}*\n\n"
         message = f"📊 *{end_date.strftime('%B')}* Month Bill Cycle\n\n"
 
+        # # Today's costs section
+        # today_total = 0
+        # today_services = []
+        
+        # for result in today_response['ResultsByTime']:
+        #     for group in result['Groups']:
+        #         service = group['Keys'][0]
+        #         cost = float(group['Metrics']['UnblendedCost']['Amount'])
+        #         if cost > 0:
+        #             today_total += cost
+        #             today_services.append((service, cost))
+        
+        # # Sort and display today's services
+        # if today_services:
+        #     today_services.sort(key=lambda x: x[1], reverse=True)
+        #     message += "*🕒 TODAY'S SPENDING DETAILS*\n"
+        #     for service, cost in today_services:
+        #         inr_cost = cost * usd_to_inr
+        #         logger.debug(f"Today's cost for {service}: USD {cost:.2f}, INR {inr_cost:.2f}")
+        #         message += f"• {service} - 💵${cost:,.2f} (₹{inr_cost:,.2f})\n"
+        # else:
+        #     message += "*🕒 TODAY'S SPENDING DETAILS*\nNo costs incurred today 📉\n"
+        
+        # today_total_inr = today_total * usd_to_inr
+        # logger.info(f"Today's total cost: USD {today_total:.2f}, INR {today_total_inr:.2f}")
+        # message += f"\n*Today's Total:* 💵${today_total:,.2f} (₹{today_total_inr:,.2f})\n\n"
+        
         # Monthly costs section
+        # message += "*📅 30-DAYS COST BREAKDOWN*\n"
+        # message += f"_{start_date.strftime('%B %d')} - {end_date.strftime('%B %d, %Y')}_\n\n"
+        
         monthly_total = 0
         monthly_services = []
         
@@ -110,21 +141,17 @@ def get_aws_costs():
         
         monthly_total_inr = monthly_total * usd_to_inr
         logger.info(f"Monthly total cost: USD {monthly_total:.2f}, INR {monthly_total_inr:.2f}")
-        message += f"\n*Service Total:* 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n\n"
-        
-        # Tax section (assuming tax is calculated as a fixed amount or a percentage)
-        tax_amount = 1.39  # Example tax amount in USD
-        tax_inr = tax_amount * usd_to_inr
-        message += f"▹ Tax - - 💵${tax_amount:,.2f} (₹{tax_inr:,.2f})\n"
-        
-        # Total with tax
-        total_with_tax = monthly_total + tax_amount
-        total_with_tax_inr = total_with_tax * usd_to_inr
-        # message += f"\n*Total with Tax:* 💵${total_with_tax:,.2f} (₹{total_with_tax_inr:,.2f})\n\n"
+        message += f"\n*Cycle Total:* 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n\n"
         
         # Summary section
         message += "*📌 SUMMARY*\n\n"
-        message += f"▹ *Total Cost incurred till last bill cycle* - 💵${total_with_tax:,.2f} (₹{total_with_tax_inr:,.2f})\n"
+        daily_average = monthly_total / 30
+        daily_average_inr = daily_average * usd_to_inr
+        logger.info(f"Daily average cost: USD {daily_average:.2f}, INR {daily_average_inr:.2f}")
+        
+        # message += f"▹ *Today's bill* - 💵${today_total:,.2f} (₹{today_total_inr:,.2f})\n"
+        message += f"▹ *Cost incurred till last bill cycle* - 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n"
+        # message += f"• *Daily Average Cost* - 💵${daily_average:,.2f} (₹{daily_average_inr:,.2f})"
         
         return message
         
