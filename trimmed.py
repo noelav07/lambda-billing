@@ -110,12 +110,12 @@ def get_aws_costs():
         
         monthly_total_inr = monthly_total * usd_to_inr
         logger.info(f"Monthly total cost: USD {monthly_total:.2f}, INR {monthly_total_inr:.2f}")
-        message += f"\n*Service Total:* 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n\n"
+        # message += f"\n*Service Total:* 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})\n\n"
         
         # Tax section (assuming tax is calculated as a fixed amount or a percentage)
         tax_amount = 1.39  # Example tax amount in USD
         tax_inr = tax_amount * usd_to_inr
-        message += f"▹ Tax - - 💵${tax_amount:,.2f} (₹{tax_inr:,.2f})\n"
+        # message += f"▹ Tax - 💵${tax_amount:,.2f} (₹{tax_inr:,.2f})\n"
         
         # Total with tax
         total_with_tax = monthly_total + tax_amount
@@ -123,7 +123,9 @@ def get_aws_costs():
         # message += f"\n*Total with Tax:* 💵${total_with_tax:,.2f} (₹{total_with_tax_inr:,.2f})\n\n"
         
         # Summary section
-        message += "*📌 SUMMARY*\n\n"
+        message += "\n*📌 SUMMARY*\n"
+        message += f"\n*Service Total:* 💵${monthly_total:,.2f} (₹{monthly_total_inr:,.2f})"
+        message += f"\n▹ Tax - 💵${tax_amount:,.2f} (₹{tax_inr:,.2f})\n"
         message += f"▹ *Total Cost incurred till last bill cycle* - 💵${total_with_tax:,.2f} (₹{total_with_tax_inr:,.2f})\n"
         
         return message
