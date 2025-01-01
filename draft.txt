@@ -1,0 +1,53 @@
+# lambda-billing
+
+
+created a slack bot, channel
+
+gave the permissions for the app/bot
+
+
+"Scopes
+A Slack app's capabilities and permissions are governed by the scopes it requests.
+
+Bot Token Scopes
+Scopes that govern what your app can access.
+
+OAuth Scope
+Description
+ 
+app_mentions:read
+View messages that directly mention @aws-bills in conversations that the app is in
+
+channels:history
+View messages and other content in public channels that aws-bills has been added to
+
+channels:read
+View basic information about public channels in a workspace
+
+chat:write
+Send messages as @aws-bills
+
+commands
+Add shortcuts and/or slash commands that people can use
+
+im:read
+View basic information about direct messages that aws-bills has been added to
+
+users:write
+Set presence for aws-bills"
+,
+
+
+installed the requirements.txt on a specific target
+
+
+zipped the target directory.
+
+
+created a lambda function, gave role through IAM to utilize the cost explorer.
+
+
+Setup event bridge for the scheduled alerts.
+
+
+configured event subsription before that configured api gateway with restapi 
